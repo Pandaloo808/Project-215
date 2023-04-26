@@ -22,7 +22,9 @@ actor_list = []
 def generate_lidar_blueprint(blueprint_library):
     lidar_blueprint = blueprint_library.find('sensor.lidar.ray_cast_semantic')
     lidar_blueprint.set_attribute('channels', str(64))
-    # Write code here
+    lidar_blueprint.set_attribute('points_per_second', str(56000*10))
+    lidar_blueprint.set_attribute('rotation_frequency', str(100))
+    lidar_blueprint.set_attribute('range', str(100*200))
     lidar_blueprint.set_attribute('upper_fov', str(15))
     lidar_blueprint.set_attribute('lower_fov', str(-30))
     return lidar_blueprint
@@ -67,12 +69,12 @@ try:
     actor_list.append(dropped_vehicle)
 
     lidar_sensor = generate_lidar_blueprint(get_blueprint_of_world)
-    sensor_lidar_spawn_point = carla.Transform(#write code here)
+    sensor_lidar_spawn_point = carla.Transform(carla.Location(x=0, y=0, z=2.0), carla.Rotation(pitch=0,yaw=90.0,roll=0))
     sensor = world.spawn_actor(lidar_sensor, sensor_lidar_spawn_point, attach_to=dropped_vehicle)
 
     lidar_figure = mlab.figure(size=(960, 540), bgcolor=(0.05, 0.05, 0.05))
-    visualise_lidar_using_mayavi = mlab.points3d(1#write code here, mode='point', #write code here, figure=lidar_figure)
-    mlab.view(#write code here)
+    visualise_lidar_using_mayavi = mlab.points3d(10,10,10,10, mode='point', colormap='gnuplot', figure=lidar_figure)
+    mlab.view(distance=250)
     lidar_point_cloud_buffer = {'pts': np.zeros((1, 3)), 'intensity': np.zeros(1)}
 
 
